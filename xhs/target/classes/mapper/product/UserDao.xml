@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.xhs.dao.UserDao">
+
+    <select id="list" resultType="com.example.xhs.pojo.entity.User">
+        select * from user
+    </select>
+
+    <select id="get" resultType="com.example.xhs.pojo.entity.User">
+        select * from user
+        where
+        (
+        username = #{usernameOrMail}
+        or email = #{usernameOrMail}
+        ) and password = #{password}
+    </select>
+
+    <select id="checkUsername" resultType="com.example.xhs.pojo.entity.User">
+        select * from user
+        where username = #{username}
+    </select>
+
+    <select id="checkEmail" resultType="com.example.xhs.pojo.entity.User">
+        select * from user
+        where email = #{email}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into user
+        (
+        username,
+        password,
+        e_name,
+        email,
+        type
+        )
+        values
+        (
+        #{username},
+        #{password},
+        #{ename},
+        #{email},
+        2
+        )
+    </insert>
+
+    <update id="updateImg">
+        update user
+        set img = #{img}
+        where id = #{id}
+    </update>
+
+    <update id="update">
+        update user
+        set e_name = #{ename},
+        password = #{password},
+        phone = #{phone}
+        where id = #{id}
+    </update>
+
+    <select id="getById" resultType="com.example.xhs.pojo.entity.User">
+        select * from user
+        where id =#{id}
+    </select>
+
+    <select id="listByPer" resultType="com.example.xhs.pojo.dto.ShowDto">
+        select
+        id ,
+        1 as category,
+        unique_id as img
+        from film
+        <where>
+        <if test="list != null and list.size >0">
+        <foreach collection="list" item="item" separator="or">
+            (instr(film_name,#{item}))
+        </foreach>
+        </if>
+        </where>
+        union all
+        select
+        id,
+        2 as category,
+        img
+        from food
+        <where>
+        <if test="list != null and list.size >0">
+        <foreach collection="list" item="item" separator="or">
+            (instr(name,#{item}))
+        </foreach>
+        </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.xhs.dao.PostDao">
+
+    <select id="list" resultType="com.example.xhs.pojo.dto.PostDto">
+        select * from post p
+        left join user u on u.id = p.user_id
+        left join
+        (select
+        count(p.id) as "commentCount" ,
+        p.id as "id"
+        from post p
+        inner join comment c on p.id = c.item_id and c.category_id = 5
+        group by p.id)
+        temp on p.id = temp.id
+        where 1=1
+        <if test="filmName !=null and filmName !=''">
+            and  instr(p.theme,#{filmName})
+        </if>
+        order by p.create_date desc
+    </select>
+
+    <insert id="add">
+        insert into post
+        (
+        theme,
+        user_id,
+        create_date,
+        title
+        )values(
+        #{theme},
+        #{userId},
+        #{createDate},
+        #{title}
+        )
+    </insert>
+
+    <select id="get" resultType="com.example.xhs.pojo.dto.PostDto">
+        select * from post p
+        left join user u on u.id = p.user_id
+        where p.id =#{id}
+    </select>
+
+    <select id="listComment" resultType="com.example.xhs.pojo.dto.CommentListDto">
+        select * from comment c
+        left join user u on u.id = c.create_by
+        where c.item_id = #{id} and category_id =5
+    </select>
+
+    <select id="listReply" resultType="com.example.xhs.pojo.dto.ReplyListDto">
+        select * from reply r
+        left join user u on u.id = r.create_by
+        where r.comment_id = #{id}
+    </select>
+</mapper>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<style>
+    input.invalid::-webkit-input-placeholder {
+        color: red;
+        font-weight: 200;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <script src="/assets/js/plugins/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="/assets/css/plugins/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/plugins/animate.min.css">
+    <link rel="stylesheet" href="/assets/css/plugins/magnific-popup.css">
+    <link rel="stylesheet" href="/assets/css/plugins/slick.css">
+    <link rel="stylesheet" href="/assets/css/plugins/slick-theme.css">
+    <link rel="stylesheet" href="/assets/css/plugins/ion.rangeSlider.min.css">
+    <link rel="stylesheet" href="assets/fonts/flaticon/flaticon.css">
+    <link rel="stylesheet" href="assets/fonts/font-awesome/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.ico">
+    <script src="/layui//layui.js"></script>
+    <link rel="stylesheet" href="/layui/css//layui.css">
+    <script type="application/javascript">
+        layui.use('layer', function () {
+            var layer = layui.layer;
+            $("#sub").click(function () {
+                var flag = false;
+                if ($("#username").val() == "") {
+                    $("#username").attr('placeholder', '请输入用户名!')
+                    $("#username").addClass("invalid")
+                    flag = true;
+                }
+                if ($("#password").val() == "") {
+                    $("#password").attr('placeholder', '请输入密码!')
+                    $("#password").addClass("invalid")
+                    flag = true;
+                }
+                if (flag == true) {
+                    return;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "login/to",
+                    data: $('#form').serialize(),
+                    async: true,
+                    success: function (data) {
+                        if (data == "success") {
+                            window.location.href = "login/index"
+                        } else {
+                            layer.open({
+                                skin: "layui-layer-molv",
+                                title: false,
+                                content: "账号或密码错误"
+                            })
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+
+</head>
+<body>
+<div class="section">
+    <div class="imgs-wrapper">
+
+    </div>
+    <div class="container">
+        <div class="andro_auth-wrapper">
+
+            <div class="andro_auth-description bg-cover bg-center dark-overlay dark-overlay-2"
+                 style="background-image: url('../assets/img/auth.jpg')">
+                <div class="andro_auth-description-inner">
+                    <i class="flaticon-coffee-cup"></i>
+                    <h2>Welcome Back!</h2>
+                    <p>欢迎来到乐娱!</p>
+                </div>
+            </div>
+            <div class="andro_auth-form">
+                <form id="form">
+                    <div class="form-group">
+                        <input id="username" type="text" class="form-control" placeholder="用户名或邮箱"
+                               name="usernameOrMail">
+                    </div>
+                    <div class="form-group">
+                        <input id="password" type="password" class="form-control" placeholder="密码" name="password">
+                    </div>
+<!--                    <a id="hdd" href="#">忘记密码?</a>-->
+                    <p>没有账户? <a href="login/register">创建新账户</a></p>
+                </form>
+                <button th:id="sub" type="submit" class="andro_btn-custom primary">登录</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row no-gutters">
+    <div class="col-lg-4 secondary-bg pattern-bg">
+        <div class="andro_instagram">
+            <h3 class="text-white">欢迎</h3>
+            <a href="#" class="andro_btn-custom light">随处看看</a>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="row no-gutters">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-6 p-0">
+                <a href="#" class="andro_ig-item">
+                    <img src="assets/img/ig/haibao1.jpg" alt="ig" style="height: 210px; width: 280px">
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-6 p-0">
+                <a href="#" class="andro_ig-item">
+                    <img src="assets/img/ig/haibao2.jpg" alt="ig" style="height: 210px; width: 280px">
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-6 p-0">
+                <a href="#" class="andro_ig-item">
+                    <img src="assets/img/ig/yinyue.jpg" alt="ig" style="height: 210px; width: 280px">
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-6 p-0">
+                <a href="#" class="andro_ig-item">
+                    <img src="assets/img/ig/meijing1.jpg" alt="ig" style="height: 210px; width: 280px">
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-6 p-0">
+                <a href="#" class="andro_ig-item">
+                    <img src="assets/img/ig/meijing2.jpg" alt="ig" style="height: 210px; width: 280px">
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-6 p-0">
+                <a href="#" class="andro_ig-item">
+                    <img src="assets/img/ig/meishi.jpg" alt="ig" style="height: 210px; width: 280px">
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Vendor Scripts -->
+<script src="/assets/js/plugins/popper.min.js"></script>
+<script src="/assets/js/plugins/waypoint.js"></script>
+<script src="/assets/js/plugins/bootstrap.min.js"></script>
+<script src="/assets/js/plugins/jquery.magnific-popup.min.js"></script>
+<script src="/assets/js/plugins/jquery.slimScroll.min.js"></script>
+<script src="/assets/js/plugins/imagesloaded.min.js"></script>
+<script src="/assets/js/plugins/jquery.steps.min.js"></script>
+<script src="/assets/js/plugins/jquery.countdown.min.js"></script>
+<script src="/assets/js/plugins/isotope.pkgd.min.js"></script>
+<script src="/assets/js/plugins/slick.min.js"></script>
+<script src="/assets/js/plugins/ion.rangeSlider.min.js"></script>
+<script src="/assets/js/plugins/jquery.zoom.min.js"></script>
+
+
+<!-- Coffeez Scripts -->
+<script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
+

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="EclipseCodeFormatterProjectSettings">
+    <option name="projectSpecificProfile">
+      <ProjectSpecificProfile>
+        <option name="formatter" value="ECLIPSE" />
+        <option name="pathToConfigFileJava" value="F:/配置与开发说明/配置与开发说明/Eclipse_Code_style.xml" />
+        <option name="selectedJavaProfile" value="Eclipse [built-in]1" />
+      </ProjectSpecificProfile>
+    </option>
+  </component>
+</project>

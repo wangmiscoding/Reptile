@@ -1,0 +1,11 @@
+{
+  "groups": [
+    {
+      "name": "xhs",
+      "type": "com.example.xhs.controller.login.LoginController",
+      "sourceType": "com.example.xhs.controller.login.LoginController"
+    }
+  ],
+  "properties": [],
+  "hints": []
+}

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.xhs.dao.FoodDao">
+    <select id="list" resultType="com.example.xhs.pojo.entity.Food">
+        select * from food
+        <where>
+            del_flag = 0
+            <if test="taste != null and taste !=''">
+                and instr(taste,#{taste})>0
+            </if>
+            <if test="name != null and name !=''">
+                and instr(name,#{name})>0
+            </if>
+            <if test="calo != null and calo !=''">
+                and instr(calo,#{calo})>0
+            </if>
+        </where>
+
+        <choose>
+            <when test="orderBy !=null and order !=''">
+                order by ${orderBy}
+            </when>
+            <otherwise>
+                order by create_date
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="batchInsert">
+        insert into food
+        (name,taste,calo,img,create_date,del_flag,main_com,sub_com,component,unique_id)
+        values
+        <foreach collection="list" item="item" separator="," >
+            (
+            #{item.name},#{item.taste},#{item.calo},#{item.img},#{item.createDate},0,#{item.mainCom},#{item.subCom},#{item.component},#{item.uniqueId}
+            )
+        </foreach>
+    </insert>
+
+    <select id="get" resultType="com.example.xhs.pojo.entity.Food">
+        select * from food
+        where id = #{id}
+    </select>
+
+
+    <select id="listByRate" resultType="com.example.xhs.pojo.entity.Food">
+        select * from food f
+        left join
+        (
+        select avg(star) as "rate",category_id,item_id
+        from rate
+       group by category_id, item_id
+        ) temp on temp.category_id = 2 and temp.item_id =f.id
+        left join
+        (
+        select
+        count(p.id) as "commentCount" ,
+        p.id as "id"
+        from food p
+        inner join comment c on p.id = c.item_id and c.category_id = 2
+        group by p.id
+        )temp2 on temp2.id = f.id
+
+        order by rate desc
+    </select>
+
+    <insert id="batchInsertStep">
+        insert into food_step
+        (food_id,img,content)
+        values
+        <foreach collection="list" item="item" separator="," >
+            (
+            #{item.foodId},#{item.img},#{item.content}
+            )
+        </foreach>
+    </insert>
+
+    <select id="listFoodStep" resultType="com.example.xhs.pojo.entity.FoodStep">
+        select * from food_step
+        where food_id =#{uniqueId}
+    </select>
+</mapper>

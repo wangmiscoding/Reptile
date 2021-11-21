@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.xhs.dao.FilmDao">
+
+    <select id="list" resultType="com.example.xhs.pojo.entity.Film">
+        select * from film
+        <where>
+            del_flag = 0
+            <if test="filmName != null and filmName !=''">
+                and instr(film_name,#{filmName})>0
+            </if>
+        </where>
+        order by create_date desc
+    </select>
+
+    <select id="get" resultType="com.example.xhs.pojo.entity.Film">
+        select * from film where id= #{id}
+    </select>
+    <insert id="batchInsert">
+        insert into film
+        (
+        film_name,
+        score,country,
+        release_time,
+        film_intro,
+        img_url,
+        main_actor,
+        film_type,
+        create_date,
+        unique_id,
+        del_flag
+        )
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.filmName},
+            #{item.score},
+            #{item.country},
+            #{item.releaseTime},
+            #{item.filmIntro},
+            #{item.imgUrl},
+            #{item.mainActor},
+            #{item.filmType},
+            #{item.createDate},
+            #{item.uniqueId},
+            0
+            )
+        </foreach>
+    </insert>
+
+    <select id="listAll" resultType="com.example.xhs.pojo.entity.Film">
+        select * from film
+    </select>
+
+    <select id="listByRate" resultType="com.example.xhs.pojo.entity.Film">
+        select * from film f
+        left join
+        (
+        select avg(star) as "rate",category_id,item_id
+        from rate
+       group by category_id, item_id
+        ) temp on temp.category_id = 1 and temp.item_id =f.id
+        left join
+        (
+        select
+        count(p.id) as "commentCount" ,
+        p.id as "id"
+        from film p
+        inner join comment c on p.id = c.item_id and c.category_id = 1
+        group by p.id
+        )temp2 on temp2.id = f.id
+
+        order by rate desc
+    </select>
+</mapper>
